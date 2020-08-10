@@ -1,28 +1,21 @@
 # Reregex, yet another minimal regex implementation
 
-## Example: Grep
+Many standard regex features are supported, such as non-greedy matching (e.g. `.*?`), character set ranges (`[a-z]`), alternations (`(a|bb)+`), and graphviz dot-formatted NFA-like diagrams.
 
-```bash
-cat README.md | cargo run --example grep -- '`[^`]+`'
-```
+Capture groups, Lookarounds and Unicode-aware features are not supported. The engine ins't particularly fast either.
+
 
 ## Example: Visualize regex
 
 ```bash
 cargo run --example dot -- '-?([1-9][0-9]*)?[13579]' > odd.dot
-dot -Tpng test.dot > test.png
+dot -Tpng odd.dot > odd.png
 ```
 
-## Features
+![Visualization](examples/odd.svg)
 
-* Greedy and non-greedy matching, e.g. `.*?`
-* Character set ranges `[a-z]`
-* Alternations `(a|bb)+`
-* Graphviz dot-formatted NFA diagrams
+## Example: Grep
 
-## Not supported
-
-* Capture groups
-* Lookarounds
-* Unicode-awareness
-* Fast execution
+```bash
+cat README.md | cargo run --example grep -- '`[^`]+`'
+```
