@@ -1,4 +1,32 @@
 use std::collections::HashSet;
+use std::fmt;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CharSet {
+    AnyOf(HashSet<char>),
+    AnyExcept(HashSet<char>),
+    Any,
+}
+
+impl CharSet {
+    pub fn accepts(&self, c: char) -> bool {
+        match self {
+            Self::AnyOf(set) => set.contains(&c),
+            Self::AnyExcept(set) => !set.contains(&c),
+            Self::Any => true,
+        }
+    }
+}
+
+impl fmt::Display for CharSet {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::AnyOf(chars) => write!(f, "[{}]", fmt(chars)),
+            Self::AnyExcept(chars) => write!(f, "[^{}]", fmt(chars)),
+            Self::Any => write!(f, "any"),
+        }
+    }
+}
 
 /// Parse char set string, i.e. string that can contain dashes like "a-z"
 ///
