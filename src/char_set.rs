@@ -76,9 +76,33 @@ pub fn fmt(chars: &HashSet<char>) -> String {
     let mut sorted: Vec<_> = chars.iter().collect();
     sorted.sort();
 
+    // Dash substitutions for adjacent ascii alphanumerics only
+
+    let mut i = 0;
+    while i + 1 < sorted.len() {
+        if sorted[i].is_ascii_alphanumeric() {
+            let mut offset = 1;
+            while i + offset < sorted.len()
+                && *sorted[i] as u32 + (offset as u32) == *sorted[i + offset] as u32
+                && sorted[i + offset].is_ascii_alphanumeric()
+            {
+                offset += 1;
+            }
+
+            if offset > 3 {
+                sorted.drain(i + 1..i + offset - 1);
+                sorted.insert(i + 1, &'-');
+            }
+        }
+
+        i += 1;
+    }
+
+    // Convert to an actual string
+
     let mut string: String = sorted.into_iter().collect();
 
-    // TODO: dash substitutions
+    // Insert special characters back
 
     if has_closing_bracket {
         string.insert(0, ']');
